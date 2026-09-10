@@ -1,0 +1,9 @@
+# Environment variables
+.env
+.env.*
+
+# Google Cloud / Firebase credentials
+backend/services/auth/serviceAccountKey.json
+
+# Node
+node_modules/
