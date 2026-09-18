@@ -5,6 +5,9 @@ import api from "../../utils/axios.js";
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserdata } from "../redux/userSlice.js";
+import LeftBar from "../components/LeftBar.jsx";
+import ChatArea from "../components/ChatArea.jsx";
+import Artifact from "../components/Artifact.jsx";
 
 const Home = () => {
   const { userData } = useSelector((state) => state.user); // To access data from the redux store
@@ -29,6 +32,10 @@ const Home = () => {
 
   return (
     <div className="h-screen flex bg-gray-900 text-white overflow-hidden">
+      <LeftBar />
+      <ChatArea />
+      <Artifact />
+
       {!userData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur">
           <div className="flex flex-col w-85 bg-mist-800 border border-white/10 rounded-2xl p-7 gap-5">
