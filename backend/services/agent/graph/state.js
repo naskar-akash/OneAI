@@ -6,4 +6,5 @@ export const agentState = Annotation.Root({
     prompt: Annotation(),  // creating 'prompt' key inside state
     aiResponse: Annotation(),  // creating 'aiResponse' key inside state
     agent: Annotation(),
+    conversationId: Annotation()
 })
