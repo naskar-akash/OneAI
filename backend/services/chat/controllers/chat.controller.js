@@ -1,26 +1,26 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
+import mongoose from "mongoose";
 
 export const createConversation = async (req, res) => {
   try {
-    const userId = req.header["x-user-id"];
+    const userId = req.headers["x-user-id"];
     console.log("userId: ", userId);
 
     const conversation = await Conversation.create({
-      userId: userId,
+      userId,
     });
     return res.status(200).json(conversation);
   } catch (error) {
     return res
       .status(500)
-      .json({ message: `Create conversation error: ${error}` });
+      .json({ message: `Create conversation error: ${error.message}` });
   }
 };
 
 export const getConversations = async (req, res) => {
   try {
-    const userId = req.header["x-user-id"];
-    console.log("userId: ", userId);
+    const userId = req.headers["x-user-id"];
 
     const conversations = await Conversation.find({
       userId: userId,
@@ -29,7 +29,7 @@ export const getConversations = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ message: `Get conversation error: ${error}` });
+      .json({ message: `Get conversation error: ${error.message}` });
   }
 };
 
