@@ -5,8 +5,6 @@ import mongoose from "mongoose";
 export const createConversation = async (req, res) => {
   try {
     const userId = req.headers["x-user-id"];
-    console.log("userId: ", userId);
-
     const conversation = await Conversation.create({
       userId,
     });
@@ -21,7 +19,6 @@ export const createConversation = async (req, res) => {
 export const getConversations = async (req, res) => {
   try {
     const userId = req.headers["x-user-id"];
-
     const conversations = await Conversation.find({
       userId: userId,
     }).sort({ updatedAt: -1 });
