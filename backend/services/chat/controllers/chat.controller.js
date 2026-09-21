@@ -59,9 +59,7 @@ export const getMessages = async (req, res) => {
     const id = req.params.conversationId;
     const messages = await Message.find({
         conversationId: id,
-      }).sort({
-      updatedAt: -1,
-    });
+      });
     return res.status(200).json(messages);
   } catch (error) {
     return res.status(500).json({ message: `Get messages error: ${error}` });

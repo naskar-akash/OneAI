@@ -16,8 +16,8 @@ const MessageList = () => {
             <p className='text-sm max-w-65 text-slate-600'>Ask me anything - code, ideas, explanation or just a quick question!</p>
           </div>
           <div className='flex flex-wrap justify-center gap-2 mt-1'>
-            {["Write a Netflix clone", "Explain", "Build a dashboard"].map((s)=>(
-                <button className='bg-slate-800 text-slate-300 hover:bg-slate-700 text-sm font-medium py-2 px-4 rounded-lg transition-colors duration-200'>
+            {["Write a Netflix clone", "Explain", "Build a dashboard"].map((s,i)=>(
+                <button key={i} className='bg-slate-800 text-slate-300 hover:bg-slate-700 text-sm font-medium py-2 px-4 rounded-lg transition-colors duration-200'>
                   {s}
                 </button>
             ))}
@@ -26,7 +26,7 @@ const MessageList = () => {
       ): (
         <div>
             {messages.map((message, i)=>(
-                <div>
+                <div key={i}>
                     <MessageBubble role={message.role} content={message.content} />
                 </div>
             ))}
