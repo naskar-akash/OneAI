@@ -24,7 +24,7 @@ export const loginUser = async (req, res) => {
       name: user.name,
       email: user.email,
       avatar: user.avatar
-    }),"EX",7 * 24 * 60 * 60)
+    }),"EX", 24 * 60 * 60)
 
     res.cookie("session", sessionId, {
       httpOnly: true,
