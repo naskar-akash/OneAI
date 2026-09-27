@@ -6,10 +6,12 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai"
 
 const groq = new ChatGroq({
     model: "openai/gpt-oss-120b",
+    // streaming: true,  To be implemented future
 })
 
 const gemini = new ChatGoogleGenerativeAI({
     model: "gemini-2.5-flash",
+    // streaming: true,  To be implemented future
 })
 
 export const getModel = async ( agent ) => {
