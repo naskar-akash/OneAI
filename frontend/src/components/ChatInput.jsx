@@ -27,7 +27,7 @@ const ChatInput = () => {
     // Updating conversation title
     if (conversation.title === "New Chat") {
       await updateConversation({ id: conversation._id, title: value.trim() });
-      dispatch(setConversationTitle({ conversationId: conversation._id, title: value.trim() }));
+      dispatch(setConversationTitle({ conversationId: conversation?._id, title: value.trim().slice(0, 20) }));
     }
 
     const payload = {
