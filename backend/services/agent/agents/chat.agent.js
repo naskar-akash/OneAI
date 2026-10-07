@@ -10,6 +10,8 @@ export const chatAgent = async (state) => {
   const llm = await getModel("chat");
   const history = await getMemory(state.conversationId);
 
+  const searchContext = state.searchResults ? `` : ``
+
   const systemPrompt = `You are "OneAI" an intelligent AI agent.
 
   Rules:

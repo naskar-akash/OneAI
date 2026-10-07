@@ -20,7 +20,7 @@ const ChatArea = () => {
         dispatch(setMessages(data))
     } 
     getMsg()
-  }, [selectedConversation])
+  }, [selectedConversation]) // Here is a problem. getMsg is called everytime when selectedConversation changes. Thus when I send message to chatagent user's message is not displayed in the chat area because selectedConversation is not changed. I need to find a way to call getMsg when a new message is sent.
 
   
   return (

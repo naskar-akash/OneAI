@@ -5,7 +5,7 @@ import redis from "../../../shared/redis/redis.js";
 
 export const agent = async (req, res) => {
   try {
-    const { prompt, conversationId } = req.body; 
+    const { prompt, conversationId, agent } = req.body; 
     
     // to save the user prompt in the database for future reference
      await axios.post(
@@ -13,7 +13,7 @@ export const agent = async (req, res) => {
       { conversationId, role: "user", content: prompt },
     );
     const result = await graph.invoke({
-        prompt, conversationId
+        prompt, conversationId, agent
     })
     const response = result.aiResponse;
      // to save user content to redis
