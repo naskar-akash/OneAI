@@ -46,8 +46,8 @@ const ChatInput = () => {
   };
 
   return (
-    <div className="w-full overflow-hidden px-3 md:px-5 py-4 border-t border-stone-700">
-      <div className="flex flex-col gap-2 bg-white/5 border border-white/[0.07] rounded-2xl px-4 py-3 pb-3">
+    <div className="w-full overflow-hidden px-3 md:px-5 py-3 border-t border-stone-700">
+      <div className="flex flex-col gap-2 bg-white/5 border border-white/[0.07] rounded-2xl px-3 py-2">
       {/* To map agents' icons */}
       <div className="flex w-[80%] gap-2 flex-wrap pr-2">
         {agents.map((agent,i) => {
