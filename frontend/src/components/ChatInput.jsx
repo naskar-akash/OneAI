@@ -41,8 +41,8 @@ const ChatInput = () => {
     dispatch(addMessages({ role: "user", content: value.trim()}));
     setValue("");
     const data = await sendMessage(payload);
-    dispatch(addMessages({ role: "assistant", content: data }));
     console.log(data);
+    dispatch(addMessages({ role: "assistant", content: data?.answer || "Content not available", images: data?.images || [] }));
   };
 
   return (

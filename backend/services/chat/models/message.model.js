@@ -1,5 +1,24 @@
 import mongoose from "mongoose";
 
+const imageSchema = new mongoose.Schema(
+  {
+    url: {
+      type: String,
+      required: true
+    },
+    title: {
+      type: String,
+      default: ""
+    },
+    description: {
+      type: String,
+      default: null
+    }
+  },
+  { _id: false }
+);
+
+
 const messageSchema = new mongoose.Schema({
     conversationId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -9,7 +28,11 @@ const messageSchema = new mongoose.Schema({
         type: String,
         enum: ["user", "assistant"]
     },
-    content: String
+    content: String,
+    images: {
+        type: [imageSchema],
+        default: []
+    },
 },{
     timestamps: true
 })

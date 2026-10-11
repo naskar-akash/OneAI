@@ -24,10 +24,10 @@ const MessageList = () => {
           </div>
         </div>
       ): (
-        <div>
+        <div className='space-y-6'>
             {messages.map((message, i)=>(
                 <div key={i}>
-                    <MessageBubble role={message.role} content={message.content} />
+                    <MessageBubble role={message.role} content={message.content} images={message.images || []} />
                 </div>
             ))}
         </div>

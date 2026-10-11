@@ -23,10 +23,14 @@ export const agent = async (req, res) => {
     // to save the assistant's response in the database for future reference
     await axios.post(
       `${process.env.CHAT_SERVICE_URL}/save-message`,
-      { conversationId, role: "assistant", content: response },
+      { conversationId, role: "assistant", content: response, images: result.images },
     );
-    return res.status(200).json({ response });
+    return res.status(200).json({ 
+      answer: result.aiResponse,
+      images: result.images
+     });
   } catch (error) {
+    console.log("Agent controller error: ", error)
     return res.status(500).json({ message: `Agent error: ${error}` });
   }
 };

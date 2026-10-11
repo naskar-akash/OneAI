@@ -46,8 +46,8 @@ export const updateConversation = async (req, res) => {
 
 export const saveMessage = async (req, res) => {
   try {
-    const { conversationId, role, content } = req.body;
-    const message = await Message.create({ conversationId, role, content });
+    const { conversationId, role, content, images } = req.body;
+    const message = await Message.create({ conversationId, role, content, images });
     return res.status(200).json(message);
   } catch (error) {
     return res.status(500).json({ message: `Save message error: ${error}` });
