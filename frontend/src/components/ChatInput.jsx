@@ -2,7 +2,7 @@ import { Mic, Paperclip, Send } from "lucide-react";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "../features/sendMessage.js";
-import { addMessages } from "../redux/messageSlice.js";
+import { addMessages, setArtifacts } from "../redux/messageSlice.js";
 import { createConversation } from "../features/createConversation.js";
 import { updateConversation } from "../features/updateConversation.js";
 import { addConversations, setConversationTitle, setSelectedConversation } from "../redux/conversationSlice.js";
@@ -41,8 +41,9 @@ const ChatInput = () => {
     dispatch(addMessages({ role: "user", content: value.trim()}));
     setValue("");
     const data = await sendMessage(payload);
-    console.log(data);
+    dispatch(setArtifacts(data.artifacts || []))
     dispatch(addMessages({ role: "assistant", content: data?.answer || "Content not available", images: data?.images || [] }));
+    console.log(data);
   };
 
   return (
@@ -65,7 +66,7 @@ const ChatInput = () => {
           onChange={(e) => setValue(e.target.value)}
           value={value}
           placeholder="Ask anything...."
-          rows={3}
+          rows={1}
           className="w-full bg-transparent outline-none resize-none text-sm text-slate-200 placeholder:text-gray-600 leading-relaxed scrollbar-none [&::-webkit-scrollbar]:hidden disabled:opacity-50"
         />
         <div className="flex justify-between items-center">

@@ -18,6 +18,22 @@ const imageSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const fileSchema = new mongoose.Schema({
+  name: String,
+  content: String,
+},
+  { _id: false }
+);
+
+const artifactSchema = new mongoose.Schema({
+  id: Number,
+  type: String,
+  title: String,
+  files: [fileSchema]
+},
+  { _id: false }
+);
+
 
 const messageSchema = new mongoose.Schema({
     conversationId: {
@@ -33,6 +49,7 @@ const messageSchema = new mongoose.Schema({
         type: [imageSchema],
         default: []
     },
+    artifacts: [artifactSchema],
 },{
     timestamps: true
 })
