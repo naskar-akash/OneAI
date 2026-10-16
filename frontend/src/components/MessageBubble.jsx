@@ -110,7 +110,7 @@ const MessageBubble = ({ role, content, images }) => {
               const value = String(children).trim();
               if (!className) {
                 return (
-                  <code className="px-1.5 py-0.5 rounded bg-white/10 text-pink-400">
+                  <code className="px-1.5 py-0.5 rounded bg-white/10 text-indigo-500">
                     {value}
                   </code>
                 );

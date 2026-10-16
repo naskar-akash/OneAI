@@ -1,8 +1,9 @@
-import {getModel} from "../../agent/config/llmModels.js"
+import { getModel } from "../../agent/config/llmModels.js";
 
 export const codingAgent = async (state) => {
-    const intentLlm = await getModel("intent")
-    const llm = await getModel("coding")
+  try {
+    const intentLlm = await getModel("intent");
+    const llm = await getModel("coding");
     const intentRes = await intentLlm.invoke(`
         You are an intelligent intent classifier.
         Return ONLY one of these values.
@@ -16,11 +17,11 @@ export const codingAgent = async (state) => {
         DOCUMENTATION
 
         User Request: ${state.prompt}
-        `)
-        const intent = intentRes.content
-        // Logic for code generation
-        if (intent == "CODE_GENERATION"){
-            const prompt = `
+        `);
+    const intent = intentRes.content;
+    // Logic for code generation
+    if (intent == "CODE_GENERATION") {
+      const prompt = `
             You are a smart coding agent of an multi-agent AI platform named ONE_AI
             
             Default stack:
@@ -85,24 +86,24 @@ export const codingAgent = async (state) => {
             - Never mention intent
 
             User Request: ${state.prompt}
-            `
-            const res = await llm.invoke(prompt)
-            const data = JSON.parse(res.content)
-            return {
-                ...state,
-                aiResponse: "Code generated successfully.",
-                artifacts: [
-                    {
-                        id: Date.now(),
-                        type: "code",
-                        title: state.prompt,
-                        files: data.files || []
-                    }
-                ]
-            }
-        }
-        // Logic for reviewing / debugging
-        const response = await llm.invoke(`
+            `;
+      const res = await llm.invoke(prompt);
+      const data = JSON.parse(res.content);
+      return {
+        ...state,
+        aiResponse: "Code generated successfully.",
+        artifacts: [
+          {
+            id: Date.now(),
+            type: "code",
+            title: state.prompt,
+            files: data.files || [],
+          },
+        ],
+      };
+    }
+    // Logic for reviewing / debugging
+    const response = await llm.invoke(`
             The user's request is: ${intent}
 
             Return Markdown only.
@@ -119,11 +120,17 @@ export const codingAgent = async (state) => {
             ## Optimised code (optional)
 
             User Request: ${state.prompt}
-            `)
-            const data = response.content
-            return {
-                ...state,
-                aiResponse: data,
-                artifacts: []
-            }
-}
+            `);
+    const data = response.content;
+    return {
+      ...state,
+      aiResponse: data,
+      artifacts: [],
+    };
+  } catch (error) {
+    return {
+      ...state,
+      aiResponse: "❌ Error in generating code. Try again.",
+    };
+  }
+};

@@ -7,19 +7,20 @@ import { getModel } from "../config/llmModels.js";
 import { getMemory } from "../config/memory.js";
 
 export const chatAgent = async (state) => {
-  const llm = await getModel("chat");
-  const history = await getMemory(state.conversationId);
+  try {
+    const llm = await getModel("chat");
+    const history = await getMemory(state.conversationId);
 
-  const searchContext = state.searchResults
-    ? `
+    const searchContext = state.searchResults
+      ? `
       Web Search Results: 
           ${JSON.stringify(state.searchResults)}
       Answer the user's question based on the search results above.`
-    : `
+      : `
       No web search results available. Answer the user's question based on your knowledge.`;
 
-      // main prompt for the chat agent
-  const systemPrompt = `You are "OneAI" an intelligent AI agent.
+    // main prompt for the chat agent
+    const systemPrompt = `You are "OneAI" an intelligent AI agent.
 
   ${searchContext}
   If Search Context exists:
@@ -45,23 +46,29 @@ export const chatAgent = async (state) => {
     - Leave spaces between every paragraph and section for better readability.
     `;
 
-  const messages = [new SystemMessage({ content: systemPrompt })];
+    const messages = [new SystemMessage({ content: systemPrompt })];
 
-  history.forEach((msg) => {
-    if (msg.role === "user") {
-      messages.push(new HumanMessage({ content: msg.content }));
-    }
-    if (msg.role === "assistant") {
-      messages.push(new AIMessage({ content: msg.content }));
-    }
-  });
+    history.forEach((msg) => {
+      if (msg.role === "user") {
+        messages.push(new HumanMessage({ content: msg.content }));
+      }
+      if (msg.role === "assistant") {
+        messages.push(new AIMessage({ content: msg.content }));
+      }
+    });
 
-  messages.push(new HumanMessage({ content: state.prompt }));
+    messages.push(new HumanMessage({ content: state.prompt }));
 
-  const response = await llm.invoke(messages);
+    const response = await llm.invoke(messages);
 
-  return {
-    ...state,
-    aiResponse: response.content,
-  };
+    return {
+      ...state,
+      aiResponse: response.content,
+    };
+  } catch (error) {
+    return {
+      ...state,
+      aiResponse: "❌ Error in generating response. Try again.",
+    };
+  }
 };
