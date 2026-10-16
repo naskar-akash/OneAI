@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import {
+  Check,
   Code,
   Code2,
   Copy,
@@ -15,13 +16,14 @@ import Editor from "@monaco-editor/react";
 
 const Artifact = () => {
   const [collapse, setCollapse] = useState(false);
-  const [tab, setTab] = useState("code");
+  const [tab, setTab] = useState("preview");
   const [activeFile, setActiveFile] = useState(0);
+  const [copied, setCopied] = useState(false);
   const { artifacts } = useSelector((state) => state.message);
 
   if (artifacts.length == 0) return;
 
-  const activeFileContent = artifacts[0]?.files?.[activeFile]?.content;
+  const file = artifacts[0]?.files[activeFile];
   const htmlFile = artifacts[0]?.files?.find(
     (file) => file.name === "index.html",
   );
@@ -33,6 +35,15 @@ const Artifact = () => {
   const canPreview = Boolean(htmlFile); // returns 'yes' if there is an HTML file, otherwise 'no'
 
   const previewDoc = preview(htmlFile, cssFile, jsFile);
+
+  // To copy
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(file?.content || "");
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
 
   const detectLanguage = (fileName = "") => {
     const name = fileName.toLowerCase();
@@ -85,8 +96,8 @@ const Artifact = () => {
               </div>
             </div>
             <div className="flex items-center gap-1 shrink-0">
-              <button className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-lg transition-colors duration-150 cursor-pointer">
-                <Copy size={15} />
+              <button onClick={handleCopy} className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-lg transition-colors duration-150 cursor-pointer">
+                {copied ? <Check size={15} />: <Copy size={15} />}
               </button>
             </div>
             {/* code and preview buttons */}
@@ -154,9 +165,9 @@ const Artifact = () => {
                   height="100%"
                   width="100%"
                   language={detectLanguage(
-                    artifacts[0]?.files?.[activeFile]?.name,
+                    file?.name,
                   )}
-                  value={activeFileContent || ""}
+                  value={file?.content || ""}
                   options={{
                     readOnly: true,
                     minimap: { enabled: false },

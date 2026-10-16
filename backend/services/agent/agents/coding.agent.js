@@ -40,7 +40,21 @@ export const codingAgent = async (state) => {
             - Beautiful spacing
             - Single page unless user asks otherwise.
 
-            Answer ONLY valid JSON.
+            IMAGES
+            =================
+
+            - Use real, publicly accessible images from Unsplash.
+            - Use the following URL format for images: "https://images.unsplash.com/photo-IMAGE_ID?w=1200&auto=format&fit=crop&q=80"
+            - Use only valid, known Unsplash image URLs. Never invent image IDs.
+            - Always include descriptive alt text for every image.
+            - For HTML images, use: "<img src="VALID_UNSPLASH_URL" alt="Description">"
+            - For CSS background images, use: "background-image: url("VALID_UNSPLASH_URL");"
+            - Ensure text remains readable over background images.
+            - Do not use placeholder images, empty src attributes, or local image paths unless the user provides image files.
+            - Do not output Markdown image syntax.
+            - Do not put image URLs in plain text expecting them to render automatically.
+
+            Return ONLY valid JSON.
 
             Schema: 
             {
