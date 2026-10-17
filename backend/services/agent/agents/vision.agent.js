@@ -54,7 +54,6 @@ export const visionAgent = async (state) => {
           ].join("\n"),
     };
   } catch (error) {
-    console.log(error)
     return {
         ...state,
         aiResponse: "❌ Error in generating image. Try again."
