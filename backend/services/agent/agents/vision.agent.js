@@ -44,7 +44,7 @@ export const visionAgent = async (state) => {
     return {
       ...state,
       aiResponse: [
-            "# 🎨 Image Generated Successfully! ✨",
+            "🎨 Image Generated Successfully! ✨",
             "",
             `![Generated Image](${downloadUrl})`,
             "",

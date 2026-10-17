@@ -95,14 +95,18 @@ const MessageBubble = ({ role, content, images }) => {
                 {children}
               </td>
             ),
-            img: ({ src, alt }) => (
+            img: ({ src }) => {
+              if (!src) return null;
+              return (
               <img
                 src={src}
-                alt={alt || "Generated image"}
+                alt={"Generated image"}
                 onClick={() => setLightBox(src)}
-                className="my-4 max-w-full max-h-125 rounded-xl object-contain cursor-zoom-in"
-              />
-            ),
+                loading="lazy"
+                onError={(e) => e.currentTarget.remove()}
+                className="w-40 h-30 md:w-48 md:h-36 object-cover rounded-xl border border-white/10 cursor-zoom-in hover:opacity-90 transition-all duration-200"
+              />)
+            },
             a: ({ href, children }) => (
               <a
                 href={href}
@@ -169,19 +173,20 @@ const MessageBubble = ({ role, content, images }) => {
       </div>
       {lightBox && (
         <div
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-6 backdrop-blur-sm"
+          className="fixed inset-0 z-9999 flex items-center justify-center bg-black/85 backdrop-blur-sm p-4 sm:p-6"
           onClick={() => setLightBox(null)}
         >
           <button
-            onClick={() => setLightBox(null)}
-            className="absolute top-5 right-5 text-white/80 hover:text-white rounded-full p-2"
+            onClick={() => {e.stopPropagation();setLightBox(null)}}
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10 rounded-full p-2 text-white/80 hover:bg-white/10 hover:text-white transition"
           >
-            <X />
+            <X size={30}/>
           </button>
           <img
             src={lightBox}
+            onClick={(e) => e.stopPropagation()}
             alt="Enlarged view"
-            className="max-w-[90vw] max-h-[85vw] rounded-2xl border border-white/10 shadow-2xl object-contain"
+            className="block w-auto h-auto max-w-[95vw] max-h-[90vh] rounded-xl border border-white/10 object-contain shadow-2xl"
           />
         </div>
       )}
