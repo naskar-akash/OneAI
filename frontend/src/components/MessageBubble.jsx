@@ -1,5 +1,5 @@
 import { Check, Copy, ExternalLink, X } from "lucide-react";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import React, { useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -47,7 +47,7 @@ const MessageBubble = ({ role, content, images }) => {
               <h1 className="text-2xl font-bold mt-5 mb-3">{children}</h1>
             ),
             h2: ({ children }) => (
-              <h2 className="text-xl font-bold mt-4 mb-2">{children}</h2>
+              <h2 className="text-xl font-semibold mt-4 mb-2">{children}</h2>
             ),
             h3: ({ children }) => (
               <h3 className="text-lg font-semibold mt-3 mb-2">{children}</h3>
@@ -95,12 +95,20 @@ const MessageBubble = ({ role, content, images }) => {
                 {children}
               </td>
             ),
+            img: ({ src, alt }) => (
+              <img
+                src={src}
+                alt={alt || "Generated image"}
+                onClick={() => setLightBox(src)}
+                className="my-4 max-w-full max-h-125 rounded-xl object-contain cursor-zoom-in"
+              />
+            ),
             a: ({ href, children }) => (
               <a
                 href={href}
                 target="_blank"
-                rel="noreferrer"
-                className="text-indigo-500 hover:text-indigo-700 inline-flex items-center gap-1 underline"
+                rel="noopener noreferrer"
+                className="text-indigo-400 inline-flex items-center gap-1 underline"
               >
                 {children}
                 <ExternalLink size={14} />
@@ -137,16 +145,17 @@ const MessageBubble = ({ role, content, images }) => {
                       )}
                     </button>
                   </div>
-                  <SyntaxHighlighter language={language}
-                  style={oneDark}
-                  wrapLongLines
-                  showLineNumbers
-                  customStyle={{
-                    margin: 0,
-                    padding: "16px",
-                    backgroundColor: "#0d1117",
-                    fontSize: "14px",
-                  }}
+                  <SyntaxHighlighter
+                    language={language}
+                    style={oneDark}
+                    wrapLongLines
+                    showLineNumbers
+                    customStyle={{
+                      margin: 0,
+                      padding: "16px",
+                      backgroundColor: "#0d1117",
+                      fontSize: "14px",
+                    }}
                   >
                     {value}
                   </SyntaxHighlighter>

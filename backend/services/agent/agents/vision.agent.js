@@ -43,15 +43,15 @@ export const visionAgent = async (state) => {
 
     return {
       ...state,
-      aiResponse: `
-        # 🎨 Image Generated Successfully! ✨
-
-        ![Generated Image](${downloadUrl})
-
-        [⬇️ Download Image](${downloadUrl})
-
-        ⏳ Note: These links expire in 10 minutes.
-        `
+      aiResponse: [
+            "# 🎨 Image Generated Successfully! ✨",
+            "",
+            `![Generated Image](${downloadUrl})`,
+            "",
+            `⬇️ [Download Image](${downloadUrl})`,
+            "",
+            "⏳ **Note:** This link is valid for 10 minutes only.",
+          ].join("\n"),
     };
   } catch (error) {
     console.log(error)
