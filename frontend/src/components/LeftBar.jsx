@@ -20,10 +20,12 @@ import {
 } from "../redux/conversationSlice";
 import { logout } from "../features/logout.js";
 import { setUserdata } from "../redux/userSlice.js";
+import BillingDrawer from "./BillingDrawer.jsx";
 
 const LeftBar = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [imgErr, setImgErr] = useState(false);
+  const [showBilling, setShowBilling] = useState(false);
   const dispatch = useDispatch();
   const { conversations, selectedConversation } = useSelector(
     (state) => state.conversation,
@@ -202,7 +204,7 @@ const LeftBar = () => {
               </div>
               {/* Credits and coins */}
               <div className="flex gap-1">
-                <button className="flex items-center justify-center w-7 h-7 roounded-sm border-none bg-transparent text-yellow-600 cursor-pointer hover:text-yellow-300 transition-all duration-150">
+                <button onClick={()=>setShowBilling(!showBilling)} className="flex items-center justify-center w-7 h-7 roounded-sm border-none bg-transparent text-yellow-600 cursor-pointer hover:text-yellow-300 transition-all duration-150">
                   <BadgeIndianRupee size={18} />
                 </button>
                 <button
@@ -220,6 +222,10 @@ const LeftBar = () => {
           )}
         </div>
       </div>
+       <BillingDrawer 
+       open = {showBilling}
+       onclose = {()=>setShowBilling(!showBilling)}
+       />
     </div>
   );
 };
