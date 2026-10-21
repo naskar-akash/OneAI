@@ -1,14 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config()
-import connectDB from "../billing/config/db.js"
-// import authRoutes from "./routes/auth.route.js";
+import connectDB from "./config/db.js"
+import router from "./routes/billing.routes.js";
 
 const port = process.env.PORT
 const app = express()
 app.use(express.json());
 
-// app.use("/", authRoutes)
+app.use("/", router)
 
 app.get('/', (req, res) => {
   res.send('Hello from Billing!')
