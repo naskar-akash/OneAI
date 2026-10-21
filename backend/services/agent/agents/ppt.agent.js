@@ -1,9 +1,12 @@
 import { getModel } from "../config/llmModels.js";
+import { generatePpt } from "../utils/generatePpt.js";
+import { uploadToS3 } from "../utils/uploadToS3.js";
+import { getFromS3 } from "../utils/getFromS3.js";
 
 export const pptAgent = async (state) => {
-    try {
-        const llm = await getModel("ppt")
-        const prompt = `
+  try {
+    const llm = await getModel("ppt");
+    const prompt = `
         You are a professional presentation designer.
 
         Return ONLY valid JSON.
@@ -36,14 +39,40 @@ export const pptAgent = async (state) => {
         - Return ONLY JSON
 
         Topic: ${state.prompt} 
-        `
-        const res = await llm.invoke(prompt)
-        console.log(JSON.parse(res.content))
-    } catch (error) {
-        console.log(error)
-         return {
-        ...state,
-        aiResponse: "❌ Error in generating PPT. Try again."
-    }
-    }
-}
+        `;
+    const res = await llm.invoke(prompt);
+    const data = JSON.parse(res.content);
+    const ppt = await generatePpt(data);
+    const buffer = await ppt.write({
+      outputType: "nodebuffer",
+    });
+    const filename = `ppt-${Date.now()}.pptx`;
+
+    await uploadToS3(
+      filename,
+      buffer,
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    );
+
+    const downloadUrl = await getFromS3(filename, 600);
+
+    return {
+      ...state,
+      aiResponse: [
+        "# Presentation Generated Successfully! ✨",
+        "",
+        `**${data.title}**`,
+        "",
+        `⬇️ [Download PPT](${downloadUrl})`,
+        "",
+        "⏳ **Note:** This link is valid for 10 minutes only.",
+      ].join("\n"),
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      ...state,
+      aiResponse: "❌ Error in generating PPT. Try again.",
+    };
+  }
+};
