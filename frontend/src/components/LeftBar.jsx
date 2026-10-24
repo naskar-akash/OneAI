@@ -224,7 +224,7 @@ const LeftBar = () => {
       </div>
        <BillingDrawer 
        open = {showBilling}
-       onclose = {()=>setShowBilling(!showBilling)}
+       onClose = {()=>setShowBilling(!showBilling)}
        />
     </div>
   );

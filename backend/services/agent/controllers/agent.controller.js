@@ -6,6 +6,7 @@ import redis from "../../../shared/redis/redis.js";
 export const agent = async (req, res) => {
   try {
     const { prompt, conversationId, agent } = req.body;
+    const userId = req.headers["x-user-id"]
 
     // to save the user prompt in the database for future reference
     await axios.post(`${process.env.CHAT_SERVICE_URL}/save-message`, {
@@ -17,6 +18,7 @@ export const agent = async (req, res) => {
       prompt,
       conversationId,
       agent,
+      userId
     });
 
     // to save user content to redis

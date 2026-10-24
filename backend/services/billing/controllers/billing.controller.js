@@ -1,6 +1,8 @@
 import { PLANS } from "../config/plans.js";
 import razorpay from "../config/razorpay.js";
 import Payment from "../models/payment.model.js";
+import crypto from "crypto";
+import axios from "axios";
 
 export const createOrder = async (req, res) => {
   try {
@@ -51,15 +53,20 @@ export const verifyPayment = async (req, res) => {
     }
     payment.status = "paid";
     payment.paymentId = razorpay_payment_id;
-    await Payment.save();
+    await payment.save();
 
-    await axios.post(`${process.env.AUTH_SERVICE}/update-plan`, {
-      plan: payment.plan,
-      credits: payment.credits,
-      userId: payment.userId,
-    });
-    return res.status(200).json({message: "Payment verified!"})
+    await axios.post(
+      `${process.env.AUTH_SERVICE}/update-plan`,
+      {
+        plan: payment.plan,
+        credits: payment.credits,
+        userId: payment.userId,
+      },
+    );
+    return res.status(200).json({ message: "Payment verified!" });
   } catch (error) {
-    return res.status(500).json({message: `Verify payment error: ${error}`})
+    return res.status(500).json({
+      message: `Payment verification failed: ${error}`
+    });
   }
 };

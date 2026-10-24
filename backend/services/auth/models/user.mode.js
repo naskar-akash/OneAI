@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
         type: Number,
         default: 100
     },
-    planExpiresAt: Date
+    planExpiresAt: Date,
 },
     {
     timestamps: true

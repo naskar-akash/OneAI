@@ -17,7 +17,7 @@ export const PLANS = {
         id: "pro",
         name: "Pro",
         amount: 499,
-        credits: 1000,
+        credits: 1200,
         validity: 30
     }
 }
