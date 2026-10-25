@@ -114,7 +114,7 @@ export const updateUserPayment = async (req, res) => {
 export const deductCredits = async(req, res) => {
   try {
     const {userId, agent} = req.body
-    const COST = {chat: 2, search: 5, coding: 25, pdf: 10, ppt: 20, vision: 30}
+    const COST = {chat: 2, search: 5, coding: 25, pdf: 10, ppt: 20, vision: 30, pdfRag: 35, imageAnalyzer: 40}
     const user = await User.findById(userId)
     if(!user){
       return res.status(400).json({message: "User not found!"})

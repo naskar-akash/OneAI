@@ -21,6 +21,7 @@ import {
 import { logout } from "../features/logout.js";
 import { setUserdata } from "../redux/userSlice.js";
 import BillingDrawer from "./BillingDrawer.jsx";
+import { clearArtifacts } from "../redux/messageSlice.js";
 
 const LeftBar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -62,7 +63,7 @@ const LeftBar = () => {
         </button>
         {/* New Chat button */}
         <button
-          onClick={()=>dispatch(setSelectedConversation(null))}
+          onClick={()=>{dispatch(setSelectedConversation(null));dispatch(clearArtifacts())}}
           className="flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-white/5 transition-colors duration-150 bg-transparent border-none cursor-pointer"
         >
           <Plus />
@@ -120,11 +121,11 @@ const LeftBar = () => {
             OneAI
           </span>
           <span className="text-xs font-medium text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full tracking-wide">
-            free
+            {userData?.plan || "free"}
           </span>
           <button
             className="flex items-center justify-center w-7 h-7 rounded-lg text-slate-500 hover:text-slate-200 hover:bg-white/5 transition-colors duration-150 bg-transparent border-none cursor-pointer"
-            onClick={()=>dispatch(setSelectedConversation(null))}
+            onClick={()=>{dispatch(setSelectedConversation(null));dispatch(clearArtifacts())}}
           >
             <PenSquare size={14} />
           </button>
@@ -134,7 +135,7 @@ const LeftBar = () => {
         <div className="px-4 pt-4 pb-2">
           <button
             className="w-full flex items-center justify-center gap-2 text-sm font-medium text-white bg-linear-to-br from-indigo-500 to-purple-700 rounded-xl py-2.5 border-none cursor-pointer hover:opacity-90 transition-opacity duration-150"
-            onClick={()=>dispatch(setSelectedConversation(null))}
+            onClick={()=>{dispatch(setSelectedConversation(null));dispatch(clearArtifacts())}}
           >
             <Plus size={15} /> New Chat
           </button>
@@ -200,7 +201,7 @@ const LeftBar = () => {
                 <p className="text-sm font-semibold text-slate-100 truncate">
                   {userData?.name || "User"}
                 </p>
-                <p className="text-xs text-slate-500 mt-px">{"Free Plan"}</p>
+                <p className="text-xs text-slate-500 mt-px">{(userData?.plan).toUpperCase() || "FREE"} </p>
               </div>
               {/* Credits and coins */}
               <div className="flex gap-1">
