@@ -21,7 +21,7 @@ const Artifact = () => {
   const [copied, setCopied] = useState(false);
   const { artifacts } = useSelector((state) => state.message);
 
-  if (!artifacts?.length) return null;
+  if (artifacts?.length == 0) return;
 
   const file = artifacts[0]?.files[activeFile];
   const htmlFile = artifacts[0]?.files?.find(

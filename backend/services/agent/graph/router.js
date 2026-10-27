@@ -9,13 +9,14 @@ export const router = async (state) => {
   };
 }
 
-if (state.file.mimeType == "application/pdf"){
+
+if (state.file.mimetype === "application/pdf"){
   return {
     ...state,
     agent: "pdfRag"
   }
 }
-if (state.file.mimeTypestatrtsWith == "image/"){
+if (state.file.mimetype.startsWith("image/")){
   return {
     ...state,
     agent: "imageAnalyzer"
