@@ -1,27 +1,27 @@
 import { getModel } from "../config/llmModels.js";
 
 export const router = async (state) => {
-
   if (state.agent && state.agent !== "auto") {
     return {
-    ...state,
-    agent: state.agent,
-  };
-}
-
-
-if (state.file.mimetype === "application/pdf"){
-  return {
-    ...state,
-    agent: "pdfRag"
+      ...state,
+      agent: state.agent,
+    };
   }
-}
-if (state.file.mimetype.startsWith("image/")){
-  return {
-    ...state,
-    agent: "imageAnalyzer"
+
+  if (state.file) {
+    if (state.file.mimetype === "application/pdf") {
+      return {
+        ...state,
+        agent: "pdfRag",
+      };
+    }
+    if (state.file.mimetype.startsWith("image/")) {
+      return {
+        ...state,
+        agent: "imageAnalyzer",
+      };
+    }
   }
-}
 
   const llm = await getModel("router");
   const prompt = `You are the Router Agent of a multi-agent AI platform named "OneAI".

@@ -16,8 +16,8 @@ const Nav = () => {
           <div className="text-sm font-semibold text-slate-100 tracking-tight">
             {selectedConversation?.title || "New Chat"}
           </div>
-          <div className="text-xs font-medium text-slate-500 bg-white/5 border border-white/6 px-1 py-0.5 rounded-full">
-            {messages?.length} Messages
+          <div className="shrink-0 whitespace-nowrap rounded-full border border-white/6 bg-white/5 px-1.5 py-0.5 text-[10px] font-medium text-slate-500 sm:px-2 sm:text-xs">
+            {messages?.length ?? 0} <span className="sm:hidden">Msgs</span><span className="hidden sm:inline">Messages</span>
           </div>
         </div>
       )}

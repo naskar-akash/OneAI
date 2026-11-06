@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import {
   Check,
   Code,
   Code2,
+  Code2Icon,
   Copy,
   Eye,
   PanelLeftClose,
   PanelRightClose,
   Presentation,
+  ViewIcon,
+  X,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import preview from "../assets/preview.js";
@@ -19,6 +22,7 @@ const Artifact = () => {
   const [tab, setTab] = useState("preview");
   const [activeFile, setActiveFile] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { artifacts } = useSelector((state) => state.message);
 
   if (artifacts?.length == 0) return;
@@ -71,21 +75,18 @@ const Artifact = () => {
     }
   };
 
-  return (
-    <motion.div
-      initial={{ width: 400 }}
-      animate={{ width: collapse ? 40 : 400 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="hidden lg:flex h-full border-2 border-white/6 flex-col overflow-hidden shrink-0 w-62.5"
-    >
+
+  const PannelContent = ({onClose}) => {
+    return (
+      <>
       {!collapse ? (
         <div className="flex flex-col h-full bg-neutral-900">
           <div className="h-14 px-4 border-b border-white/6 flex items-center gap-3 shrink-0">
             <button
-              onClick={() => setCollapse(!collapse)}
+              onClick={onClose ?? (() => setCollapse(!collapse))}
               className="flex items-center justify-center w-7 h-7 rounded-lg text-slate-500 hover:text-slate-200 transition-all duration-200 bg-transparent border-none cursor-pointer shrink-0"
             >
-              <PanelRightClose size={16} />
+              {onClose ? <X size={16}/> : <PanelRightClose size={16} />}
             </button>
             <div className="flex items-center gap-2 flex-1 min-w-0">
               <div className="flex items-center justify-center w-6 h-6 rounded-md bg-stone-800 shrink-0">
@@ -207,7 +208,29 @@ const Artifact = () => {
           </div>
         </div>
       )}
+      </>
+    )
+  }
+
+  return (
+    <>
+    <button onClick={()=> setMobileOpen(true)} className="lg:hidden fixed bottom-24 right-2 z-40 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-800 text-white text-sm font-medium "><Code2Icon size={14}/>View Code</button>
+    <AnimatePresence>
+    {mobileOpen && <> <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}} transition={{duration: 0.2}} onClick={()=> setMobileOpen(false)} className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"></motion.div>
+    <motion.div initial={{x: "100%"}} animate={{ x: 0}} exit={{ x: "100%"}} transition={{ duration: 0.25, ease: "easeInOut"}} className="lg:hidden fixed inset-y-0 right-0 z-50 w-[88vw] max-w-105 border border-white/6 overflow-hidden">
+    <PannelContent onClose={() => setMobileOpen(false)} />
     </motion.div>
+    </>}
+    </AnimatePresence>
+    <motion.div
+      initial={{ width: 400 }}
+      animate={{ width: collapse ? 40 : 400 }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className="hidden lg:flex h-full border-2 border-white/6 flex-col overflow-hidden shrink-0 w-62.5"
+    >
+      <PannelContent />
+    </motion.div>
+    </>
   );
 };
 

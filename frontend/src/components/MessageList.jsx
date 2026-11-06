@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import MessageBubble from './MessageBubble.jsx';
+import LoadingAnimation from './LoadingAnimation.jsx';
 
 const MessageList = () => {
     const { selectedConversation } = useSelector((state)=>state.conversation);
@@ -30,6 +31,7 @@ const MessageList = () => {
                     <MessageBubble role={message.role} content={message.content} images={message.images || []} />
                 </div>
             ))}
+            <LoadingAnimation />
         </div>
       ) }
     </div>

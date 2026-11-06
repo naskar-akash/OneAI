@@ -46,11 +46,14 @@ const ChatInput = () => {
     formData.append("prompt", value.trim());
     formData.append("conversationId", conversation?._id);
     formData.append("agent", selectedAgent.toLocaleLowerCase());
-    formData.append("file", selectedFile);
+    if (selectedFile) {
+      formData.append("file", selectedFile);
+    }
 
     dispatch(addMessages({ role: "user", content: value.trim() }));
     setValue("");
     const data = await sendMessage(formData);
+    setSelectedFile(null)
     dispatch(setArtifacts(data?.artifacts || []));
     dispatch(
       addMessages({
