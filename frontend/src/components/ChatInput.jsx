@@ -2,7 +2,7 @@ import { FileText, Mic, Paperclip, Send, X } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "../features/sendMessage.js";
-import { addMessages, setArtifacts } from "../redux/messageSlice.js";
+import { addMessages, setArtifacts, setIsLoading } from "../redux/messageSlice.js";
 import { createConversation } from "../features/createConversation.js";
 import { updateConversation } from "../features/updateConversation.js";
 import {
@@ -23,6 +23,7 @@ const ChatInput = () => {
 
   const handleSendMessage = async () => {
     // automatically create a new conversation if no conversation is selected
+    dispatch(setIsLoading(true));
     let conversation = selectedConversation;
     if (!conversation) {
       const conv = await createConversation();
@@ -53,6 +54,7 @@ const ChatInput = () => {
     dispatch(addMessages({ role: "user", content: value.trim() }));
     setValue("");
     const data = await sendMessage(formData);
+    dispatch(setIsLoading(false))
     setSelectedFile(null)
     dispatch(setArtifacts(data?.artifacts || []));
     dispatch(
