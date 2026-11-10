@@ -5,9 +5,11 @@ import { vectorStore } from "../config/vectorDb.js";
 import { getModel } from "../config/llmModels.js";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { deductCredits } from "../utils/deductCredits.js";
+import { checkAgentLimit } from "../config/agentLimit.js";
 
 export const pdfRag = async (state) => {
   try {
+    await checkAgentLimit(state.userId, "pdf");
     const buffer = fs.readFileSync(state.file.path);
     const pdf = new PDFParse({
       data: buffer,
@@ -22,15 +24,15 @@ export const pdfRag = async (state) => {
     });
     const docs = await splitter.createDocuments([text]);
     const collectionName = `pdf-${Date.now()}`;
-    const store = await vectorStore(docs, collectionName)
+    const store = await vectorStore(docs, collectionName);
 
-    const releventDocs = await store.similaritySearch(state.prompt, 5)
+    const releventDocs = await store.similaritySearch(state.prompt, 5);
 
-    const context = releventDocs.map(d => d.pageContent).join("\n\n")
-    const llm = await getModel("pdfRag")
+    const context = releventDocs.map((d) => d.pageContent).join("\n\n");
+    const llm = await getModel("pdfRag");
 
     const messages = [
-        new SystemMessage(`
+      new SystemMessage(`
             You are OneAI PDF Assistant.
 
             RULES:
@@ -42,27 +44,30 @@ export const pdfRag = async (state) => {
             - Use Markdown formatting.
 
             `),
-            new HumanMessage(`
+      new HumanMessage(`
                 Context: ${context}
                 Question: ${state.prompt}
-                `)
-    ]
+                `),
+    ];
 
-    const response = await llm.invoke(messages)
-    await deductCredits(state.userId, "pdfRag")
+    const response = await llm.invoke(messages);
+    await deductCredits(state.userId, "pdfRag");
     return {
-        ...state,
-        aiResponse: response.content
-    }
-
+      ...state,
+      aiResponse: response.content,
+    };
   } catch (error) {
-    console.log(error)
+    if (error?.status == 429) {
+      return {
+        ...state,
+        aiResponse: error?.data?.message,
+      };
+    }
     return {
       ...state,
       aiResponse: "❌ Error in analyzing PDF. Try again.",
     };
-  }
-  finally {
-    fs.unlinkSync(state.file.path)
+  } finally {
+    fs.unlinkSync(state.file.path);
   }
 };

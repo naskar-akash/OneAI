@@ -1,8 +1,10 @@
 import { getModel } from "../../agent/config/llmModels.js";
 import { deductCredits } from "../utils/deductCredits.js";
+import { checkAgentLimit } from "../config/agentLimit.js";
 
 export const codingAgent = async (state) => {
   try {
+    await checkAgentLimit(state.userId, "coding");
     const intentLlm = await getModel("intent");
     const llm = await getModel("coding");
     const intentRes = await intentLlm.invoke(`
@@ -91,7 +93,7 @@ export const codingAgent = async (state) => {
       const res = await llm.invoke(prompt);
       const data = JSON.parse(res.content);
 
-       await deductCredits(state.userId, "coding")
+      await deductCredits(state.userId, "coding");
 
       return {
         ...state,
@@ -127,7 +129,7 @@ export const codingAgent = async (state) => {
             `);
     const data = response.content;
 
-    await deductCredits(state.userId, "coding")
+    await deductCredits(state.userId, "coding");
 
     return {
       ...state,
@@ -135,6 +137,12 @@ export const codingAgent = async (state) => {
       artifacts: [],
     };
   } catch (error) {
+    if (error?.status == 429) {
+      return {
+        ...state,
+        aiResponse: error?.data?.message,
+      };
+    }
     return {
       ...state,
       aiResponse: "❌ Error in generating code. Try again.",

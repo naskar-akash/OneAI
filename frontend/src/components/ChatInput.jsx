@@ -14,7 +14,7 @@ import { agents } from "../assets/Array/agentsArray.js";
 
 const ChatInput = () => {
   const { selectedConversation } = useSelector((state) => state.conversation);
-  const { messages } = useSelector((state) => state.message);
+  const { messages, isLoading } = useSelector((state) => state.message);
   const [value, setValue] = useState("");
   const [selectedAgent, setSelectedAgent] = useState("Auto");
   const [selectedFile, setSelectedFile] = useState(null);
@@ -157,7 +157,7 @@ const ChatInput = () => {
           <div>
             <button
               onClick={handleSendMessage}
-              disabled={!value}
+              disabled={!value && isLoading}
               className={`flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-150 ${value.trim() ? "text-white hover:text-slate-300 bg-linear-to-br from-blue-600 to-purple-700 hover:opacity-90  cursor-pointer" : "bg-gray-600 text-slate-400 cursor-not-allowed"}`}
             >
               <Send size={15} />

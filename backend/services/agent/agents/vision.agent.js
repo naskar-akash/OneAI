@@ -3,9 +3,11 @@ import axios from "axios";
 import { uploadToS3 } from "../utils/uploadToS3.js";
 import { getFromS3 } from "../utils/getFromS3.js";
 import { deductCredits } from "../utils/deductCredits.js";
+import { checkAgentLimit } from "../config/agentLimit.js";
 
 export const visionAgent = async (state) => {
   try {
+    await checkAgentLimit(state.userId, "image");
     const llm = await getModel("image");
     const res = await llm.invoke(`
         You are an elite AI prompt engineer.
@@ -36,7 +38,7 @@ export const visionAgent = async (state) => {
 
     const imageRes = await axios.get(imageUrl, { responseType: "arraybuffer" });
 
-    await deductCredits(state.userId, "vision")
+    await deductCredits(state.userId, "vision");
 
     const buffer = Buffer.from(imageRes.data);
     const filename = `image-${Date.now()}.png`;
@@ -44,23 +46,28 @@ export const visionAgent = async (state) => {
     await uploadToS3(filename, buffer, "image/png");
     const downloadUrl = await getFromS3(filename, 600);
 
-
     return {
       ...state,
       aiResponse: [
-            "🎨 Image Generated Successfully! ✨",
-            "",
-            `![Generated Image](${downloadUrl})`,
-            "",
-            `⬇️ [Download Image](${downloadUrl})`,
-            "",
-            "⏳ **Note:** This link is valid for 10 minutes only.",
-          ].join("\n"),
+        "🎨 Image Generated Successfully! ✨",
+        "",
+        `![Generated Image](${downloadUrl})`,
+        "",
+        `⬇️ [Download Image](${downloadUrl})`,
+        "",
+        "⏳ **Note:** This link is valid for 10 minutes only.",
+      ].join("\n"),
     };
   } catch (error) {
-    return {
+    if (error?.status == 429) {
+      return {
         ...state,
-        aiResponse: "❌ Error in generating image. Try again."
+        aiResponse: error?.data?.message,
+      };
     }
+    return {
+      ...state,
+      aiResponse: "❌ Error in generating image. Try again.",
+    };
   }
 };

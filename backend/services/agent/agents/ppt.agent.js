@@ -3,9 +3,11 @@ import { generatePpt } from "../utils/generatePpt.js";
 import { uploadToS3 } from "../utils/uploadToS3.js";
 import { getFromS3 } from "../utils/getFromS3.js";
 import { deductCredits } from "../utils/deductCredits.js";
+import { checkAgentLimit } from "../config/agentLimit.js";
 
 export const pptAgent = async (state) => {
   try {
+    await checkAgentLimit(state.userId, "ppt");
     const llm = await getModel("ppt");
     const prompt = `
         You are a professional presentation designer.
@@ -44,7 +46,7 @@ export const pptAgent = async (state) => {
     const res = await llm.invoke(prompt);
     const data = JSON.parse(res.content);
 
-    await deductCredits(state.userId, "ppt")
+    await deductCredits(state.userId, "ppt");
 
     const ppt = await generatePpt(data);
     const buffer = await ppt.write({
@@ -73,7 +75,12 @@ export const pptAgent = async (state) => {
       ].join("\n"),
     };
   } catch (error) {
-    console.log(error);
+    if (error?.status == 429) {
+      return {
+        ...state,
+        aiResponse: error?.data?.message,
+      };
+    }
     return {
       ...state,
       aiResponse: "❌ Error in generating PPT. Try again.",

@@ -2,9 +2,11 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { getModel } from "../config/llmModels.js";
 import fs from "fs/promises";
 import { deductCredits } from "../utils/deductCredits.js";
+import { checkAgentLimit } from "../config/agentLimit.js";
 
 export const imageAnalyzer = async (state) => {
   try {
+    await checkAgentLimit(state.userId, "image")
     const llm = await getModel("imageAnalyzer");
     const imageBuffer = await fs.readFile(state.file.path);
     const base64Img = imageBuffer.toString("base64");
@@ -43,7 +45,12 @@ export const imageAnalyzer = async (state) => {
         aiResponse: response.content
     }
   } catch (error) {
-    console.log(error)
+    if (error?.status == 429) {
+      return {
+      ...state,
+      aiResponse: error?.data?.message,
+    };
+    }
     return{
         ...state,
         aiResponse: "❌ Error in generating response. Try again.",
