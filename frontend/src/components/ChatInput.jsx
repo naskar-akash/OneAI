@@ -64,7 +64,6 @@ const ChatInput = () => {
         images: data?.images || [],
       }),
     );
-    console.log("data from backend: ", data);
   };
 
   return (

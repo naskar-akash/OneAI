@@ -11,7 +11,6 @@ const BillingDrawer = ({ open, onClose }) => {
   const handleUpgrade = async (plan) => {
     try {
       const data = await createOrder(plan);
-      console.log(data);
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: data?.order?.amount,
@@ -20,10 +19,8 @@ const BillingDrawer = ({ open, onClose }) => {
         description: `${data?.plan?.name} Plan`,
         order_id: data?.order?.id,
         handler: async (res) => {
-          console.log("response: ", res);
           try {
             const data = await verifyPayment(res);
-            console.log("verify payment date: ", data);
           } catch (error) {
             console.error(
               "Verification error:",
