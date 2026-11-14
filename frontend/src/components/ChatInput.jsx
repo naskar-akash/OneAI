@@ -1,8 +1,12 @@
-import { FileText, Mic, Paperclip, Send, X } from "lucide-react";
-import React, { useRef, useState } from "react";
+import { FileText, Mic, MicOff, Paperclip, Send, X } from "lucide-react";
+import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sendMessage } from "../features/sendMessage.js";
-import { addMessages, setArtifacts, setIsLoading } from "../redux/messageSlice.js";
+import {
+  addMessages,
+  setArtifacts,
+  setIsLoading,
+} from "../redux/messageSlice.js";
 import { createConversation } from "../features/createConversation.js";
 import { updateConversation } from "../features/updateConversation.js";
 import {
@@ -18,8 +22,47 @@ const ChatInput = () => {
   const [value, setValue] = useState("");
   const [selectedAgent, setSelectedAgent] = useState("Auto");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef(null);
   const dispatch = useDispatch();
   const fileRef = useRef(null);
+
+  useEffect(() => {
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return
+   const recognition = new SpeechRecognition();
+   recognition.lang = "en-US";
+   recognition.interimResults = true;
+   recognition.continuous = true;
+
+   recognition.onresult = (event) => {
+    let transcript = "";
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+    setValue(transcript);
+   }
+   recognition.onend = () => {
+    setListening(false);
+   }
+   recognitionRef.current = recognition;
+
+  }, []);
+
+  // Toggle function for speech recognition
+  const toggleMic = () => {
+    if (!recognitionRef.current) {
+      alert("Speech Recognition is not supported.");
+    }
+    if(listening) {
+      recognitionRef.current.stop();
+      setListening(false);
+    } else {
+      recognitionRef.current.start();
+      setListening(true);
+    }
+  }
 
   const handleSendMessage = async () => {
     // automatically create a new conversation if no conversation is selected
@@ -33,7 +76,7 @@ const ChatInput = () => {
     }
 
     // Updating conversation title
-    if (conversation.title === "New Chat") {
+    if (conversation?.title === "New Chat") {
       await updateConversation({ id: conversation._id, title: value.trim() });
       dispatch(
         setConversationTitle({
@@ -54,8 +97,8 @@ const ChatInput = () => {
     dispatch(addMessages({ role: "user", content: value.trim() }));
     setValue("");
     const data = await sendMessage(formData);
-    dispatch(setIsLoading(false))
-    setSelectedFile(null)
+    dispatch(setIsLoading(false));
+    setSelectedFile(null);
     dispatch(setArtifacts(data?.artifacts || []));
     dispatch(
       addMessages({
@@ -104,20 +147,20 @@ const ChatInput = () => {
                 )
               )}
               <div className="">
-              <p className="text-xs text-white">{selectedFile?.name}</p>
-              <p className="text-[10px] text-slate-500">
-                {Math.ceil(selectedFile?.size / (1024 * 1024))} MB
-              </p>
-            </div>
-            <button
-              onClick={() => {
-                setSelectedFile(null);
-                fileRef.current.value = "";
-              }}
-              className="ml-2"
-            >
-              <X size={14} className="text-slate-500 hover:text-white" />
-            </button>
+                <p className="text-xs text-white">{selectedFile?.name}</p>
+                <p className="text-[10px] text-slate-500">
+                  {Math.ceil(selectedFile?.size / (1024 * 1024))} MB
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setSelectedFile(null);
+                  fileRef.current.value = "";
+                }}
+                className="ml-2"
+              >
+                <X size={14} className="text-slate-500 hover:text-white" />
+              </button>
             </div>
           </div>
         )}
@@ -149,8 +192,11 @@ const ChatInput = () => {
             >
               <Paperclip size={16} />
             </button>
-            <button className="flex items-center justify-center w-7 h-8 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-white/5 border border-transparent hover:border-white/6 transition-all duration-150 bg-transparent cursor-pointer">
-              <Mic size={16} />
+            <button
+              onClick={toggleMic}
+              className={`flex items-center justify-center w-7 h-8 rounded-lg transition-all duration-150 cursor-pointer ${listening ? "bg-red-500 text-white" : "text-slate-400 hover:bg-white/5"}`}
+            >
+              {listening ? <Mic size={16} /> : <MicOff size={16} />}
             </button>
           </div>
           <div>
