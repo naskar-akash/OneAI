@@ -25,7 +25,7 @@ app.use("/api/agent", protect, proxyWithHeader(process.env.AGENT_SERVICE))
 app.use("/api/billing", protect, proxyWithHeader(process.env.BILLING_SERVICE))
 
 app.get('/', (req, res) => {
-  res.send('Hello World from gateway!')
+  res.send('Hello World from gateway')
 })
 app.get('/api/me', protect, getCurrentUser)
 
