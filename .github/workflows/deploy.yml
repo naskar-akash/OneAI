@@ -8,6 +8,7 @@ on:
 env:
     AWS_REGION: ${{ secrets.AWS_REGION }}
     AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+    ECS_CLUSTER: ${{ secrets.ECS_CLUSTER }}
 
 jobs:
   deploy-backend:
@@ -116,36 +117,36 @@ jobs:
       - name: Deploy Gateway
         run: |
             aws ecs update-service \
-            --cluster ${{ secrets.ECS_CLUSTER }} \
-            --service ${{ secrets.GATEWAY_SERVICE}} \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ secrets.GATEWAY_SERVICE }} \
             --force-new-deployment
 
       - name: Deploy Auth
         run: |
             aws ecs update-service \
-            --cluster ${{ secrets.ECS_CLUSTER }} \
-            --service ${{ secrets.AUTH_SERVICE}} \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ secrets.AUTH_SERVICE }} \
             --force-new-deployment
 
       - name: Deploy Chat
         run: |
             aws ecs update-service \
-            --cluster ${{ secrets.ECS_CLUSTER }} \
-            --service ${{ secrets.CHAT_SERVICE}} \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ secrets.CHAT_SERVICE }} \
             --force-new-deployment
 
       - name: Deploy Agent
         run: |
             aws ecs update-service \
-            --cluster ${{ secrets.ECS_CLUSTER }} \
-            --service ${{ secrets.AGENT_SERVICE}} \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ secrets.AGENT_SERVICE }} \
             --force-new-deployment
 
       - name: Deploy Billing
         run: |
             aws ecs update-service \
-            --cluster ${{ secrets.ECS_CLUSTER }} \
-            --service ${{ secrets.BILLING_SERVICE}} \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ secrets.BILLING_SERVICE }} \
             --force-new-deployment
 
   deploy-frontend:
