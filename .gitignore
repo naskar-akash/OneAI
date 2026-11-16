@@ -8,6 +8,10 @@
 !.env.example
 !.env.template
 
+# Firebase service account credentials
+serviceAccountKey.json
+
+
 # Private keys and certificates
 *.pem
 *.key
