@@ -13,3 +13,14 @@ export const app = getApps().length
   : initializeApp({
       credential: cert(serviceAccount),
     });
+
+
+// // In development
+// import { cert, initializeApp, getApps } from "firebase-admin";
+// import serviceAccount from "../serviceAccountKey.json" with { type: "json" };
+
+// export const app = getApps().length
+//   ? getApps()[0]
+//   : initializeApp({
+//       credential: cert(serviceAccount),
+//     });

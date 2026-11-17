@@ -119,12 +119,12 @@ const LeftBar = () => {
           <Menu size={15} />
         </button>
 
-        {mobileOpen && (
+        {mobileOpen && (<>
           <div
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
           ></div>
-        )}
+        
 
 
       <div className={`fixed lg:static inset-y-0 left-0 z-50 w-67.5 h-screen shrink-0 bg-neutral-900 border-r-2 border-white/6 ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
@@ -255,7 +255,7 @@ const LeftBar = () => {
             )}
           </div>
         </div>
-      </div>
+      </div></>)}
       <div className="relative z-60">
         <BillingDrawer
           open={showBilling}
