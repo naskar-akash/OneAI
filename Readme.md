@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-## ONEAI
-=======
-# OneAI — Multi-Agent AI Platform
+## OneAI — Multi-Agent AI Platform
 
 **One Platform, Multiple Tasks.** 
 *A full-stack, microservices-based AI platform that brings conversational AI, web research, coding assistance, document creation, image generation, and document understanding together in one application.*
@@ -186,4 +183,3 @@ Deployed version of this application is: [https://oneai.com](https://d108iamaxsx
 ## Creator
 
 OneAI is developed and maintained by Akash Naskar
->>>>>>> 9ca04afc33ab191cb7424d150ce436a92382be3c
