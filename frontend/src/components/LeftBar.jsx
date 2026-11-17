@@ -185,7 +185,7 @@ const LeftBar = () => {
             <button
               className="w-full flex items-center justify-center gap-2 text-sm font-medium text-white bg-linear-to-br from-indigo-500 to-purple-700 rounded-xl py-2.5 border-none cursor-pointer hover:opacity-90 transition-opacity duration-150"
               onClick={() => {
-                dispatch(setSelectedConversation(null));setCollapsed(!collapsed);
+                dispatch(setSelectedConversation(null));setMobileOpen(!mobileOpen);
               }}
             >
               <Plus size={15} /> New Chat
