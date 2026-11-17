@@ -19,7 +19,7 @@ import {
   addConversations,
   setConversations,
   setSelectedConversation,
-} from "../redux/conversationSlice";
+} from "../redux/conversationSlice.js";
 import { logout } from "../features/logout.js";
 import { setUserdata } from "../redux/userSlice.js";
 import BillingDrawer from "./BillingDrawer.jsx";
@@ -53,6 +53,30 @@ const LeftBar = () => {
     dispatch(setUserdata(null));
   };
 
+
+  // // collapsed: true, after clicking the collapse button
+  // if (collapsed) {
+  //   // mobileOpen: true, for mobile view 
+  //   if (mobileOpen) {
+  //     return(<></>)
+  //   }
+  //   // mobileOpen: false, for desktop view
+  //    else {
+  //     return(<></>)
+  //   }
+  // }
+  // // collapsed: false, Just after loading the page
+  // else {
+  //   // mobileOpen: true, for mobile view
+  //   if (mobileOpen) {
+  //     return(<></>)
+  //   } 
+  //   // mobileOpen: false, for desktop view
+  //   else {
+  //     return(<></>)
+  //   }
+  // }
+  
   if (collapsed) {
     return (
       <div className="hidden lg:flex flex-col items-center w-14 h-screen border-r bg-neutral-900 border-white/6 py-4 gap-1 shrink-0">
@@ -119,18 +143,18 @@ const LeftBar = () => {
           <Menu size={15} />
         </button>
 
-        {mobileOpen && (<>
+        {mobileOpen && (
           <div
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
           ></div>
+        )}
+
+
+      <div className={`fixed lg:static inset-y-0 left-0 z-50 w-67.5 min-h-0 shrink-0 bg-neutral-900 border-r-2 border-white/6 ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
         
 
-
-      <div className={`fixed lg:static inset-y-0 left-0 z-50 w-67.5 h-screen shrink-0 bg-neutral-900 border-r-2 border-white/6 ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
-        
-
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col min-h-0 h-screen">
           {/* Header div */}
           <div className="flex items-center gap-2.5 px-4 py-4 border-b border-white/12">
             <div
@@ -255,7 +279,7 @@ const LeftBar = () => {
             )}
           </div>
         </div>
-      </div></>)}
+      </div>
       <div className="relative z-60">
         <BillingDrawer
           open={showBilling}
