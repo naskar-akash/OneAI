@@ -154,7 +154,7 @@ const LeftBar = () => {
       <div className={`fixed lg:static inset-y-0 left-0 z-50 w-67.5 min-h-0 shrink-0 bg-neutral-900 border-r-2 border-white/6 ${mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
         
 
-        <div className="flex flex-col min-h-0 h-screen">
+        <div className="flex flex-col min-h-0">
           {/* Header div */}
           <div className="flex items-center gap-2.5 px-4 py-4 border-b border-white/12">
             <div
