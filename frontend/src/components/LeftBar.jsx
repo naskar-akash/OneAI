@@ -90,7 +90,7 @@ const LeftBar = () => {
         {/* New Chat button */}
         <button
           onClick={() => {
-            dispatch(setSelectedConversation(null)); setCollapsed(!collapsed)
+            dispatch(setSelectedConversation(null));
           }}
           className="flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-white/5 transition-colors duration-150 bg-transparent border-none cursor-pointer"
         >
@@ -185,7 +185,7 @@ const LeftBar = () => {
             <button
               className="w-full flex items-center justify-center gap-2 text-sm font-medium text-white bg-linear-to-br from-indigo-500 to-purple-700 rounded-xl py-2.5 border-none cursor-pointer hover:opacity-90 transition-opacity duration-150"
               onClick={() => {
-                dispatch(setSelectedConversation(null));
+                dispatch(setSelectedConversation(null));setCollapsed(!collapsed);
               }}
             >
               <Plus size={15} /> New Chat
