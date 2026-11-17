@@ -90,7 +90,7 @@ const LeftBar = () => {
         {/* New Chat button */}
         <button
           onClick={() => {
-            dispatch(setSelectedConversation(null));
+            dispatch(setSelectedConversation(null)); setCollapsed(!collapsed)
           }}
           className="flex items-center justify-center w-9 h-9 rounded-xl text-slate-500 hover:text-slate-200 hover:bg-white/5 transition-colors duration-150 bg-transparent border-none cursor-pointer"
         >
